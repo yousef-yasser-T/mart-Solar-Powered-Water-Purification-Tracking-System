@@ -28,6 +28,7 @@
 - [Wiring Diagram](#-wiring-diagram)
 - [Circuit Schematic](#-circuit-schematic)
 - [Installation & Upload](#-installation--upload)
+- [Demo Video](#-demo-video)
 - [Future Development](#-future-development)
 - [Contributing](#-contributing)
 
@@ -450,6 +451,32 @@ cd solar-water-purifier
 # 6. Upload
 #    Click Upload (→)
 ```
+
+---
+
+## 🎬 Demo Video
+
+> A full walkthrough of the system — from solar tracking to water purification and battery switching.
+
+### ▶️ Watch on YouTube
+
+[![Solar Water Purifier Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+
+> 📌 *Click the thumbnail above to watch the demo on YouTube.*
+
+### 📹 What the video covers:
+- 🔭 Solar tracker following the sun in real time across 3 axes
+- 💧 Water pump operation and flow rate on the LCD display
+- 🔋 Battery switching via Safety Switch K (Battery 1 → Battery 2)
+- ⚡ Charging protocol demonstration (Solar → Step-Up → Regulator → Battery)
+- 📟 Arduino code walkthrough and relay logic explanation
+
+---
+
+> **To add your video:**
+> 1. Upload your video to YouTube
+> 2. Copy the video ID from the URL: `https://youtube.com/watch?v=`**`YOUR_VIDEO_ID`**
+> 3. Replace `YOUR_VIDEO_ID` in both the image link and the URL above
 
 ---
 
