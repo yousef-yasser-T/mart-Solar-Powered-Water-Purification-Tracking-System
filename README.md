@@ -3,7 +3,7 @@
 # ☀️ Solar-Powered Water Purification System
 ### نظام تنقية المياه بالطاقة الشمسية
 
-![Arduino](https://img.shields.io/badge/Arduino-UNO-00979D?style=for-the-badge&logo=arduino&logoColor=white)
+![Arduino]([https://img.shields.io/badge/Arduino-UNO-00979D?style=for-the-badge&logo=arduino&logoColor=white](https://tse1.mm.bing.net/th/id/OIP.ZRumkCWW4PIF3bj045tZ0AHaHa?rs=1&pid=ImgDetMain&o=7&rm=3))
 ![Solar](https://img.shields.io/badge/Solar-0.5W_5.5V-FFD700?style=for-the-badge&logo=sun&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
