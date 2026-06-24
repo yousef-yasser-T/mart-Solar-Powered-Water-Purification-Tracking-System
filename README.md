@@ -500,6 +500,7 @@ cd solar-water-purifier
 ### ▶️ Watch on YouTube
 
 [![Solar Water Purifier Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+https://medmansedu-my.sharepoint.com/:v:/g/personal/yusufshawiesh_std_mans_edu_eg/IQCl7pIhrUfTS4_gyKZsZmw-AUb9zcQ1N9P8Y5V_wLx41GQ?e=5Vp5Wu
 
 > 📌 *Click the thumbnail above to watch the demo on YouTube.*
 
