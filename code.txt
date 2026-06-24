@@ -1,0 +1,151 @@
+#include <Servo.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+int LDR1 = A0;
+int LDR2 = A1;
+int LDR3 = A2;
+int LDR4 = A3;
+
+int value1, value2, value3, value4;
+
+Servo servoPan;
+Servo servoTilt;
+
+float panPos = 90;
+float tiltPos = 90;
+
+unsigned long previousMillis = 0;
+const int interval = 20;
+
+// ------ الإضافات ------
+
+// ريليه 4
+int relay1 = 2;
+int relay2 = 4;
+int relay3 = 7;
+int relay4 = 8;
+
+// ريليه واحد
+int relaySingle = 11;
+
+// زرار
+int buttonPin = 5;
+
+// ------ Flow Sensor ------
+volatile int flowPulseCount = 0;
+float flowRate;
+unsigned long oldTime = 0;
+int flowSensorPin = 3;
+
+// ------ LCD I2C ------
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void flowPulse() {
+  flowPulseCount++;
+}
+
+void setup() {
+  Serial.begin(9600);
+  servoPan.attach(9);
+  servoTilt.attach(10);
+  servoPan.write(panPos);
+  servoTilt.write(tiltPos);
+
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
+  pinMode(relay3, OUTPUT);
+  pinMode(relay4, OUTPUT);
+
+  pinMode(relaySingle, OUTPUT);
+  pinMode(buttonPin, INPUT);
+
+  digitalWrite(relay1, LOW);
+  digitalWrite(relay2, LOW);
+  digitalWrite(relay3, LOW);
+  digitalWrite(relay4, LOW);
+
+  digitalWrite(relaySingle, HIGH);
+
+  // ===== Flow Sensor =====
+  pinMode(flowSensorPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(flowSensorPin), flowPulse, RISING);
+
+  // ===== LCD =====
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("Flow Meter");
+
+  oldTime = millis();
+}
+
+void loop() {
+
+  if (digitalRead(buttonPin) == HIGH) {
+    digitalWrite(relaySingle, LOW);
+  }
+
+  if (Serial.available()) {
+    char c = Serial.read();
+    if (c == 'N') {
+      digitalWrite(relaySingle, LOW);
+    }
+  }
+
+  if ((millis() - oldTime) > 1000) {
+    
+    detachInterrupt(digitalPinToInterrupt(flowSensorPin));
+    
+    flowRate = ((1000.0 / (millis() - oldTime)) * flowPulseCount) / 7.5 / 60.0 * 1000.0;
+    
+    oldTime = millis();
+    flowPulseCount = 0;
+    
+    attachInterrupt(digitalPinToInterrupt(flowSensorPin), flowPulse, RISING);
+    
+    // عرض على LCD
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Flow Rate:");
+    
+    lcd.setCursor(0,1);
+    lcd.print(flowRate);
+    lcd.print(" mL/s");
+  }
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+
+    value1 = analogRead(LDR1);
+    value2 = analogRead(LDR2);
+    value3 = analogRead(LDR3);
+    value4 = analogRead(LDR4);
+
+    float x1 = round(value1 / 20.0) / 5.0;
+    float x2 = round(value2 / 20.0) / 5.0;
+    float x3 = round(value3 / 20.0) / 5.0;
+    float x4 = round(value4 / 20.0) / 5.0;
+
+    float rightLDR = (x1 + x3) / 2.0;
+    float leftLDR  = (x2 + x4) / 2.0;
+    float topLDR   = (x1 + x2) / 2.0;
+    float bottomLDR = (x3 + x4) / 2.0;
+
+    float panDiff = rightLDR - leftLDR;
+    float tiltDiff = topLDR - bottomLDR;
+
+    if (abs(panDiff) > 0.02) {
+      panPos += (panDiff > 0 ? 0.1 : -0.1);
+      panPos = constrain(panPos, 0, 180);
+      servoPan.write(panPos);
+    }
+
+    if (abs(tiltDiff) > 0.02) {
+      tiltPos += (tiltDiff > 0 ? -0.1 : 0.1);
+      tiltPos = constrain(tiltPos, 0, 180);
+      servoTilt.write(tiltPos);
+    }
+  }
+}
