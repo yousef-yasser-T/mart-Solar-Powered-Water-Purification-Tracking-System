@@ -97,7 +97,8 @@ This project is a **self-powered water purification unit** designed for off-grid
 
 ## ⚙️ Mechanical Components
 
-> 📸 *[Add mechanical assembly photos here]*
+><img width="1083" height="561" alt="Screenshot 2026-06-24 172416" src="https://github.com/user-attachments/assets/34bc6597-158e-4d81-bf94-62c81fa7b080" />
+ 📸 *[Add mechanical assembly photos here]*
 
 ### Structure & Filter Assembly
 
