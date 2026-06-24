@@ -133,6 +133,8 @@ The tracker uses a **2-servo gimbal** attached to the solar panel:
 ## 🔌 Hardware Components
 
 > 📸 *[Add hardware/wiring photos here]*
+> 
+> 📸 *[Add hardware/wiring photos here]*
 
 ### Full Bill of Materials (BOM)
 
@@ -199,124 +201,156 @@ Install via Arduino IDE → **Sketch → Include Library → Manage Libraries**:
 ### Full Firmware
 
 ```cpp
+#include <Servo.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <Servo.h>
 
-// --- Pin Definitions ---
-#define FLOW_SENSOR_PIN 2
-#define RELAY_1 4
-#define RELAY_2 5
-#define RELAY_3 6
-#define RELAY_4 7
-#define SWITCH_SAFETY A4
+int LDR1 = A0;
+int LDR2 = A1;
+int LDR3 = A2;
+int LDR4 = A3;
 
-// Servos
-Servo servoHorizontal;
-Servo servoVertical;
-int servoH_Pos = 90;
-int servoV_Pos = 90;
+int value1, value2, value3, value4;
 
-// LDRs (Voltage Dividers with 10k resistors)
-#define LDR_TOP_LEFT     A0
-#define LDR_TOP_RIGHT    A1
-#define LDR_BOTTOM_LEFT  A2
-#define LDR_BOTTOM_RIGHT A3
+Servo servoPan;
+Servo servoTilt;
 
-// Flow Sensor Variables
-volatile int pulseCount = 0;
-float flowRate = 0.0;
+float panPos = 90;
+float tiltPos = 90;
+
+unsigned long previousMillis = 0;
+const int interval = 20;
+
+// ------ الإضافات ------
+
+// ريليه 4
+int relay1 = 2;
+int relay2 = 4;
+int relay3 = 7;
+int relay4 = 8;
+
+// ريليه واحد
+int relaySingle = 11;
+
+// زرار
+int buttonPin = 5;
+
+// ------ Flow Sensor ------
+volatile int flowPulseCount = 0;
+float flowRate;
 unsigned long oldTime = 0;
+int flowSensorPin = 3;
 
+// ------ LCD I2C ------
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-void pulseCounter() {
-  pulseCount++;
+void flowPulse() {
+  flowPulseCount++;
 }
 
 void setup() {
   Serial.begin(9600);
+  servoPan.attach(9);
+  servoTilt.attach(10);
+  servoPan.write(panPos);
+  servoTilt.write(tiltPos);
 
-  // Relay Pins Setup (Active Low - HIGH = OFF)
-  pinMode(RELAY_1, OUTPUT); digitalWrite(RELAY_1, HIGH);
-  pinMode(RELAY_2, OUTPUT); digitalWrite(RELAY_2, HIGH);
-  pinMode(RELAY_3, OUTPUT); digitalWrite(RELAY_3, HIGH);
-  pinMode(RELAY_4, OUTPUT); digitalWrite(RELAY_4, HIGH);
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
+  pinMode(relay3, OUTPUT);
+  pinMode(relay4, OUTPUT);
 
-  pinMode(SWITCH_SAFETY, INPUT_PULLUP);
-  pinMode(FLOW_SENSOR_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(FLOW_SENSOR_PIN), pulseCounter, FALLING);
+  pinMode(relaySingle, OUTPUT);
+  pinMode(buttonPin, INPUT);
 
-  servoHorizontal.attach(9);
-  servoVertical.attach(10);
-  servoHorizontal.write(servoH_Pos);
-  servoVertical.write(servoV_Pos);
+  digitalWrite(relay1, LOW);
+  digitalWrite(relay2, LOW);
+  digitalWrite(relay3, LOW);
+  digitalWrite(relay4, LOW);
 
+  digitalWrite(relaySingle, HIGH);
+
+  // ===== Flow Sensor =====
+  pinMode(flowSensorPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(flowSensorPin), flowPulse, RISING);
+
+  // ===== LCD =====
   lcd.init();
   lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print("Solar Purifier");
-  delay(2000);
-  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Flow Meter");
+
+  oldTime = millis();
 }
 
 void loop() {
-  // --- 1. Solar Tracking Logic ---
-  int topLeft     = analogRead(LDR_TOP_LEFT);
-  int topRight    = analogRead(LDR_TOP_RIGHT);
-  int bottomLeft  = analogRead(LDR_BOTTOM_LEFT);
-  int bottomRight = analogRead(LDR_BOTTOM_RIGHT);
 
-  int avgTop   = (topLeft + topRight) / 2;
-  int avgBot   = (bottomLeft + bottomRight) / 2;
-  int avgLeft  = (topLeft + bottomLeft) / 2;
-  int avgRight = (topRight + bottomRight) / 2;
+  if (digitalRead(buttonPin) == HIGH) {
+    digitalWrite(relaySingle, LOW);
+  }
 
-  // Vertical tracking
-  if (avgTop > avgBot && servoV_Pos < 180) servoV_Pos++;
-  else if (avgBot > avgTop && servoV_Pos > 0) servoV_Pos--;
-  servoVertical.write(servoV_Pos);
+  if (Serial.available()) {
+    char c = Serial.read();
+    if (c == 'N') {
+      digitalWrite(relaySingle, LOW);
+    }
+  }
 
-  // Horizontal tracking
-  if (avgLeft > avgRight && servoH_Pos < 180) servoH_Pos++;
-  else if (avgRight > avgLeft && servoH_Pos > 0) servoH_Pos--;
-  servoHorizontal.write(servoH_Pos);
-
-  // --- 2. Water Flow Calculation ---
   if ((millis() - oldTime) > 1000) {
-    detachInterrupt(digitalPinToInterrupt(FLOW_SENSOR_PIN));
-    flowRate = ((1000.0 / (millis() - oldTime)) * pulseCount) / 7.5;
+    
+    detachInterrupt(digitalPinToInterrupt(flowSensorPin));
+    
+    flowRate = ((1000.0 / (millis() - oldTime)) * flowPulseCount) / 7.5 / 60.0 * 1000.0;
+    
     oldTime = millis();
-    pulseCount = 0;
-
-    lcd.setCursor(0, 0);
-    lcd.print("Flow: ");
+    flowPulseCount = 0;
+    
+    attachInterrupt(digitalPinToInterrupt(flowSensorPin), flowPulse, RISING);
+    
+    // عرض على LCD
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Flow Rate:");
+    
+    lcd.setCursor(0,1);
     lcd.print(flowRate);
-    lcd.print(" L/Min   ");
-
-    attachInterrupt(digitalPinToInterrupt(FLOW_SENSOR_PIN), pulseCounter, FALLING);
+    lcd.print(" mL/s");
   }
 
-  // --- 3. Safety Switch & Relay Protocol Logic ---
-  if (digitalRead(SWITCH_SAFETY) == LOW) {
-    // Battery 1 charges Battery 2 (Ground-sharing protocol)
-    digitalWrite(RELAY_1, LOW);
-    digitalWrite(RELAY_2, LOW);
-    digitalWrite(RELAY_3, LOW);
-    digitalWrite(RELAY_4, LOW);
-    lcd.setCursor(0, 1);
-    lcd.print("BATT1 -> BATT2  ");
-  } else {
-    // Standard Solar → Battery 1 charging mode
-    digitalWrite(RELAY_1, HIGH);
-    digitalWrite(RELAY_2, HIGH);
-    digitalWrite(RELAY_3, HIGH);
-    digitalWrite(RELAY_4, HIGH);
-    lcd.setCursor(0, 1);
-    lcd.print("Solar Charging  ");
-  }
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
 
-  delay(50);
+    value1 = analogRead(LDR1);
+    value2 = analogRead(LDR2);
+    value3 = analogRead(LDR3);
+    value4 = analogRead(LDR4);
+
+    float x1 = round(value1 / 20.0) / 5.0;
+    float x2 = round(value2 / 20.0) / 5.0;
+    float x3 = round(value3 / 20.0) / 5.0;
+    float x4 = round(value4 / 20.0) / 5.0;
+
+    float rightLDR = (x1 + x3) / 2.0;
+    float leftLDR  = (x2 + x4) / 2.0;
+    float topLDR   = (x1 + x2) / 2.0;
+    float bottomLDR = (x3 + x4) / 2.0;
+
+    float panDiff = rightLDR - leftLDR;
+    float tiltDiff = topLDR - bottomLDR;
+
+    if (abs(panDiff) > 0.02) {
+      panPos += (panDiff > 0 ? 0.1 : -0.1);
+      panPos = constrain(panPos, 0, 180);
+      servoPan.write(panPos);
+    }
+
+    if (abs(tiltDiff) > 0.02) {
+      tiltPos += (tiltDiff > 0 ? -0.1 : 0.1);
+      tiltPos = constrain(tiltPos, 0, 180);
+      servoTilt.write(tiltPos);
+    }
+  }
 }
 ```
 
