@@ -48,6 +48,8 @@ This project is a **self-powered water purification unit** designed for off-grid
 | 🔌 Optional Mains Power | Can also be powered from AC mains electricity (220V via adapter) |
 
 ---
+<img width="1600" height="1200" alt="44444" src="https://github.com/user-attachments/assets/5d243bfa-3746-41c9-9e7b-4af87306c155" />
+
 
 ## 🏗️ System Architecture
 
@@ -98,7 +100,8 @@ This project is a **self-powered water purification unit** designed for off-grid
 ## ⚙️ Mechanical Components
 
 ><img width="1083" height="561" alt="Screenshot 2026-06-24 172416" src="https://github.com/user-attachments/assets/34bc6597-158e-4d81-bf94-62c81fa7b080" />
- 📸 *[Add mechanical assembly photos here]*
+ <img width="1199" height="629" alt="Screenshot 2026-06-24 172606" src="https://github.com/user-attachments/assets/408f787c-6292-45ab-b944-a96537e901b9" />
+📸 *[Add mechanical assembly photos here]*
 
 ### Structure & Filter Assembly
 
@@ -134,8 +137,11 @@ The tracker uses a **2-servo gimbal** attached to the solar panel:
 ## 🔌 Hardware Components
 
 > 📸 *[Add hardware/wiring photos here]*
-> 
-> 📸 *[Add hardware/wiring photos here]*
+
+<img width="1199" height="629" alt="Screenshot 2026-06-24 172606" src="https://github.com/user-attachments/assets/3d090c1c-fe5f-44eb-baca-f5a4be0ddd1d" />
+<img width="1200" height="1600" alt="66" src="https://github.com/user-attachments/assets/dc3a7eb0-975f-460f-9fb2-92b3fe67d89f" />
+<img width="1600" height="1200" alt="WhatsApp Image 2026-05-06 at 2 04 05 PM" src="https://github.com/user-attachments/assets/e01e1d4f-b2ec-4b41-ab0e-34f3a98fb41c" />
+
 
 ### Full Bill of Materials (BOM)
 
