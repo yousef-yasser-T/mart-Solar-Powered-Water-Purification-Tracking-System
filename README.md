@@ -100,8 +100,8 @@ This project is a **self-powered water purification unit** designed for off-grid
 ## ⚙️ Mechanical Components
 
 ><img width="1083" height="561" alt="Screenshot 2026-06-24 172416" src="https://github.com/user-attachments/assets/34bc6597-158e-4d81-bf94-62c81fa7b080" />
- <img width="1199" height="629" alt="Screenshot 2026-06-24 172606" src="https://github.com/user-attachments/assets/408f787c-6292-45ab-b944-a96537e901b9" />
-📸 *[Add mechanical assembly photos here]*
+ 
+📸 *[ mechanical photos here]*
 
 ### Structure & Filter Assembly
 
@@ -136,7 +136,7 @@ The tracker uses a **2-servo gimbal** attached to the solar panel:
 
 ## 🔌 Hardware Components
 
-> 📸 *[Add hardware/wiring photos here]*
+> 📸 *[hardware/wiring photos here]*
 
 <img width="1199" height="629" alt="Screenshot 2026-06-24 172606" src="https://github.com/user-attachments/assets/3d090c1c-fe5f-44eb-baca-f5a4be0ddd1d" />
 <img width="1200" height="1600" alt="66" src="https://github.com/user-attachments/assets/dc3a7eb0-975f-460f-9fb2-92b3fe67d89f" />
@@ -444,7 +444,6 @@ Flow Rate (L/min) = (pulses per second) / 7.5
 
 ## 🗺️ Wiring Diagram
 
-> 📸 *[Add your Fritzing or hand-drawn wiring diagram image here]*
 
 ```markdown
 ![Wiring Diagram](docs/wiring_diagram.png)
@@ -454,7 +453,6 @@ Flow Rate (L/min) = (pulses per second) / 7.5
 
 ## 🔧 Circuit Schematic
 
-> 📸 *[Add your circuit schematic image here]*
 
 ```markdown
 ![Schematic](docs/schematic.png)
