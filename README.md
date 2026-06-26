@@ -7,7 +7,7 @@
 [![Solar](https://img.shields.io/badge/Solar-0.5W_5.5V-FFD700?style=for-the-badge&logo=sun&logoColor=black)](https://voltx-store.com/shop?search=solar)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
-[![Description](https://img.shields.io/badge/Description-Active-red?style=for-the-badge)](https://drive.google.com/file/d/1eO2G-9rWXN39tgvqHlXM5O4ocnhAcQ5u/view?usp=drive_link)
+[![Description](https://img.shields.io/badge/Description-PDF-red?style=for-the-badge)](https://drive.google.com/file/d/1eO2G-9rWXN39tgvqHlXM5O4ocnhAcQ5u/view?usp=drive_link)
  
 > **An innovative embedded system that combines solar tracking, dual-battery management via a custom charging protocol, and real-time water purification monitoring — all controlled by a single Arduino UNO.**
 
